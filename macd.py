@@ -39,7 +39,6 @@ with open('prices.csv') as csvfile:
                 ki["macd"] = anelement["second"]
                 ki["ema9"] = anelement["third"]
                 ni.append(ki)
-    print ni
 
 num_day = input("Number of days to consider = ")
 
@@ -252,3 +251,26 @@ elif diff < 0:
     print "Output of SMA20-slope analysis: SELL"
 else:
     print "SAME SMA20! SMA20-slope test is inconclusive"
+
+
+with open('quotes-bollinger.json') as json_data_bollinger:
+    data_bollinger = json.load(json_data_bollinger)
+
+    #for changing format of data. Yeah taking the longer route only for testing purposes.
+    di_bollinger = []
+    for adate in dates:
+        for againgroup in data_bollinger:
+            for againdate in againgroup.values():
+                if adate == againdate[0]:
+                    ki = {}
+                    ki["date"] = againdate[0]
+                    ki["upper_band"] = againdate[2]
+                    ki["middle_band"] = againdate[3]
+                    ki["lower_band"] = againdate[4]
+                    for aele in ni:
+                        avar = 0
+                        if aele["date"] == adate:
+                            ki["price"] = aele["price"]
+                    di_bollinger.append(ki)
+
+print di_bollinger
