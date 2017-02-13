@@ -273,4 +273,45 @@ with open('quotes-bollinger.json') as json_data_bollinger:
                             ki["price"] = aele["price"]
                     di_bollinger.append(ki)
 
-print di_bollinger
+boll_array = []
+
+for anele in range(num_day):
+    boll_array.append(di_bollinger[anele])
+
+boll_array = [x for x in boll_array[::-1]]
+
+print boll_array
+
+boll_list = []
+
+for k in range(len(boll_array)):
+    try:
+        if boll_array[k]["price"] < boll_array[k + 1]["price"] and boll_array[k + 1]["price"] > boll_array[k + 2]["price"]:
+            boll_list.append({"MAX":boll_array[k + 1]})
+        if boll_array[k]["price"] > boll_array[k + 1]["price"] and boll_array[k + 1]["price"] < boll_array[k + 2]["price"]:
+            boll_list.append({"MIN":boll_array[k + 1]})
+    except:
+        continue
+
+print boll_list
+
+for k in range(len(boll_list)):
+    try:
+        if boll_list[k].keys()[0] == "MAX" and boll_list[k + 1].keys()[0] == "MIN" and boll_list[k + 2].keys()[0] == "MAX":
+            if float(boll_list[k].values()[0]["price"]) > float(boll_list[k + 2].values()[0]["price"]):
+                print "Finding sell condition after date: " + boll_list[k + 1].values()[0]["date"]
+                compare_value = float(boll_list[k + 1].values()[0]["price"])
+                for athing in boll_list[k + 1::]:
+                    if float(athing.values()[0]["price"]) < compare_value:
+                        print "Sell condition on date: " + athing.values()[0]["date"]
+                        break
+        if boll_list[k].keys()[0] == "MIN" and boll_list[k + 1].keys()[0] == "MAX" and boll_list[k + 2].keys()[0] == "MIN":
+            if float(boll_list[k].values()[0]["price"]) < float(boll_list[k + 2].values()[0]["price"]):
+                print "Finding buy condition after date: " + boll_list[k + 1].values()[0]["date"]
+                compare_value = float(boll_list[k + 1].values()[0]["price"])
+                for athing in boll_list[k + 1::]:
+                    if float(athing.values()[0]["price"]) > compare_value:
+                        print "Buy condition on date: " + athing.values()[0]["date"]
+                        break
+    except:
+        pass
