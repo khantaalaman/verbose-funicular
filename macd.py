@@ -1,7 +1,7 @@
 import json
 import csv
-import matplotlib.pyplot as plt
 
+print "Starting SIMULATION..."
 
 with open('quotes.json') as json_data:
     data = json.load(json_data)
@@ -24,6 +24,9 @@ with open('quotes.json') as json_data:
                     ki["third"] = againdate[2]
                     ki["fourth"] = againdate[3]
                     di.append(ki)
+
+
+print "Loading PRICES..."
 
 with open('prices.csv') as csvfile:
     readCSV = csv.reader(csvfile, delimiter=',')
@@ -76,8 +79,8 @@ for t in range(len(macds)):
         pass
 
 
-print prices_minimas
-print macd_minimas
+print "Price minimas are: " + str(prices_minimas)
+print "MACD minimas are: " + str(macd_minimas)
 
 buy_con = []
 sel_con = []
@@ -195,6 +198,7 @@ with open('quotes-1.json') as json_data_stck:
                     di_stck.append(ki)
 
 #the D-line analysis
+print "Checking D-Line Analysis..."
 
 if float(di_stck[0]["slow_d"]) < 20:
     main_val = "less_than_20"
@@ -217,9 +221,11 @@ for aval in range(num_day):
         cross_check_list.append([di_stck[aval]["date"], main_val, check_val])
         main_val = check_val
 
-print cross_check_list
+#print cross_check_list
 
 #End of D-line Analysis.
+
+print "Analysing SMA-20 Slope..."
 
 #Analysing SMA-20's Slope on the present day. Here it will be 1/02/2017 as per the database available.
 
@@ -253,6 +259,9 @@ else:
     print "SAME SMA20! SMA20-slope test is inconclusive"
 
 
+print "Starting Bollinger's Analysis..."
+
+
 with open('quotes-bollinger.json') as json_data_bollinger:
     data_bollinger = json.load(json_data_bollinger)
 
@@ -280,7 +289,7 @@ for anele in range(num_day):
 
 boll_array = [x for x in boll_array[::-1]]
 
-print boll_array
+#print boll_array
 
 boll_list = []
 
@@ -293,7 +302,7 @@ for k in range(len(boll_array)):
     except:
         continue
 
-print boll_list
+#print boll_list
 
 for k in range(len(boll_list)):
     try:
