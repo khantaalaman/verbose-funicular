@@ -56,6 +56,7 @@ for popo in range(1720):
     ni = leli[(1720-popo):(1750-popo)]
 
     this_date = leli[(1719-popo)]["date"]
+    price_this_date = leli[(1719-popo)]["price"]
 
     prices = []
     macds = []
@@ -201,11 +202,22 @@ for popo in range(1720):
         pass
 
 
-    print cross_list
-
     if macd_con_buy:
-        results.append({"backtest_date": this_date, "test_name": "MACD", "result": "BUY", "operate_on": this_date})
+        results.append({"backtest_date": this_date, "test_name": "MACD", "result": "BUY", "operate_on": this_date, "price": price_this_date})
     if macd_con_sell:
-        results.append({"backtest_date": this_date, "test_name": "MACD", "result": "SELL", "operate_on": this_date})
+        results.append({"backtest_date": this_date, "test_name": "MACD", "result": "SELL", "operate_on": this_date, "price": price_this_date})
 
 print results
+
+ofile  = open('macd_results.csv', "wb")
+writer = csv.writer(ofile, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
+for aresult in results:
+    row_list = []
+    row_list.append(aresult["backtest_date"])
+    row_list.append(aresult["price"])
+    row_list.append(aresult["result"])
+    row_list.append(aresult["operate_on"])
+    row_list.append(aresult["test_name"])
+    writer.writerow(row_list)
+
+ofile.close()

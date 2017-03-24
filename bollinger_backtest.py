@@ -114,7 +114,7 @@ for popo in range(1720):
                     for athing in boll_list[k + 1::]:
                         if float(athing.values()[0]["price"]) < compare_value:
                             print "Sell condition on date: " + athing.values()[0]["date"]
-                            results.append({"backtest_date": this_date, "test_name": "MACD", "result": "SELL",
+                            results.append({"backtest_date": this_date, "test_name": "BOLLINGER", "result": "SELL",
                                             "operate_on": athing.values()[0]["date"]})
                             break
             if boll_list[k].keys()[0] == "MIN" and boll_list[k + 1].keys()[0] == "MAX" and boll_list[k + 2].keys()[
@@ -125,10 +125,22 @@ for popo in range(1720):
                     for athing in boll_list[k + 1::]:
                         if float(athing.values()[0]["price"]) > compare_value:
                             print "Buy condition on date: " + athing.values()[0]["date"]
-                            results.append({"backtest_date": this_date, "test_name": "MACD", "result": "BUY",
+                            results.append({"backtest_date": this_date, "test_name": "BOLLINGER", "result": "BUY",
                                             "operate_on": athing.values()[0]["date"]})
                             break
         except:
             pass
 
 print results
+
+ofile  = open('bollinger_results.csv', "wb")
+writer = csv.writer(ofile, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
+for aresult in results:
+    row_list = []
+    row_list.append(aresult["backtest_date"])
+    row_list.append(aresult["result"])
+    row_list.append(aresult["operate_on"])
+    row_list.append(aresult["test_name"])
+    writer.writerow(row_list)
+
+ofile.close()
